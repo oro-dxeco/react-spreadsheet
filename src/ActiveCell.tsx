@@ -11,11 +11,17 @@ import { getCellDimensions } from "./util";
 type Props = {
   DataEditor: Types.DataEditorComponent;
   getBindingsForCell: Types.GetBindingsForCell<Types.CellBase>;
+  /**
+   * trueの場合、view modeでもDataEditorを表示する
+   * この場合はmodeがDataEditorに渡されるので、それを使ってDataEditor側で表示・非表示を制御する
+   * デフォルト: `false`
+   */
+  supportIme?: boolean;
 };
 
 const ActiveCell: React.FC<Props> = (props) => {
   const rootRef = React.useRef<HTMLDivElement>(null);
-  const { getBindingsForCell } = props;
+  const { getBindingsForCell, supportIme } = props;
 
   const dispatch = useDispatch();
   const setCellData = React.useCallback(
@@ -118,14 +124,19 @@ const ActiveCell: React.FC<Props> = (props) => {
       onClick={mode === "view" && !readOnly ? edit : undefined}
       tabIndex={0}
     >
-      {mode === "edit" && active && (
+      {/* supportImeがtrueの場合、editモードでなくてもDataEditorを表示させる */}
+      {(supportIme || mode === "edit") && active && (
         <DataEditor
+          key={`${active.row}_${active.column}`}
           row={active.row}
           column={active.column}
           cell={cell}
           // @ts-ignore
           onChange={handleChange}
           exitEditMode={view}
+          // modeとsupportImeをDataEditorに渡す
+          mode={mode}
+          supportIme={supportIme}
         />
       )}
     </div>

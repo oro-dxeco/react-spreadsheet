@@ -70,6 +70,17 @@ export type Props<CellType extends Types.CellBase> = {
    * Defaults to: `false`.
    */
   hideColumnIndicators?: boolean;
+  /**
+   * trueの場合、view modeでもDataEditorを表示する（そうしないと日本語IMEが有効化されないため）
+   * この場合はmodeがDataEditorに渡されるので、それを使ってDataEditor側で表示・非表示を制御する
+   * デフォルト: `false`
+   */
+  supportIme?: boolean;
+  /**
+   * trueの場合、選択中の要素のblurを無効化する
+   * デフォルト: `false`
+   */
+  disableBlur?: boolean;
   // Custom Components
   /** Component rendered above each column. */
   ColumnIndicator?: Types.ColumnIndicatorComponent;
@@ -127,6 +138,8 @@ const Spreadsheet = <CellType extends Types.CellBase>(
     rowLabels,
     hideColumnIndicators,
     hideRowIndicators,
+    supportIme,
+    disableBlur,
     onKeyDown,
     Table = DefaultTable,
     Row = DefaultRow,
@@ -252,6 +265,7 @@ const Spreadsheet = <CellType extends Types.CellBase>(
     onSelect,
     rowLabels,
     columnLabels,
+    disableBlur,
   ]);
 
   React.useEffect(() => {
@@ -345,11 +359,12 @@ const Spreadsheet = <CellType extends Types.CellBase>(
       const { currentTarget } = event;
       setTimeout(() => {
         if (!isFocusedWithin(currentTarget)) {
-          blur();
+          // disableBlurフラグがオンの場合はblurさせない
+          !disableBlur && blur();
         }
       }, 0);
     },
-    [blur]
+    [blur, disableBlur]
   );
 
   const formulaParser = React.useMemo(() => {
@@ -475,9 +490,10 @@ const Spreadsheet = <CellType extends Types.CellBase>(
         DataEditor={DataEditor}
         // @ts-ignore
         getBindingsForCell={getBindingsForCell}
+        supportIme={supportIme}
       />
     ),
-    [DataEditor, getBindingsForCell]
+    [DataEditor, getBindingsForCell, supportIme]
   );
 
   const rootNode = React.useMemo(
