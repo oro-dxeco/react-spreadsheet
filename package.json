@@ -1,8 +1,8 @@
 {
   "name": "@oro-dxeco/react-spreadsheet",
-  "version": "0.6.0+001",
+  "version": "0.6.1",
   "description": "Simple, customizable yet performant spreadsheet for React",
-  "author": "Iddan Aaronsohn <mail@aniddan.com> (https://aniddan.com)",
+  "author": "ORO <oro_dxeco@jp.oro.com>",
   "keywords": [
     "spreadsheet",
     "excel",
@@ -139,11 +139,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/iddan/react-spreadsheet.git"
+    "url": "git+https://github.com/oro-dxeco/react-spreadsheet.git"
   },
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/iddan/react-spreadsheet/issues"
-  },
-  "homepage": "https://github.com/iddan/react-spreadsheet#readme"
+  "homepage": "https://github.com/oro-dxeco/react-spreadsheet#readme"
 }
